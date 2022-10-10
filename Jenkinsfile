@@ -12,9 +12,16 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     bat 'mvn clean install -DfailIfNoTests=false -Dtest=*RunTest -Dcucumber.options="${TAGS}"'
-                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'index.html', reportName: 'htmlReport', reportTitles: '', useWrapperFileDirectly: true])
                 }
             }
         }
-   
+    
+        stage('Generate Report') {
+             steps {
+                   publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'index.html', reportName: 'htmlReport', reportTitles: '', useWrapperFileDirectly: true])
+             }
+        }
+
+    }
+    
 }
