@@ -12,26 +12,9 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
                     bat 'mvn clean install -DfailIfNoTests=false -Dtest=*RunTest -Dcucumber.options="${TAGS}"'
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '', reportFiles: 'index.html', reportName: 'htmlReport', reportTitles: '', useWrapperFileDirectly: true])
                 }
             }
         }
-        stage('Clean Cucumber.json file') {
-             steps {
-                catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-                    bat 'mvn test -PCucumber-generator -Dmaven.test.skip=true -e'
-                }
-               }
-        }
-        stage('Generate Report') {
-             steps {
-                  bat 'mvn test integration-test -Dmaven.test.skip=true'
-             }
-        }
-
-    }
-    post {
-        always {
-             cucumber '**/cucumber.json'
-             }
-        }
+   
 }
